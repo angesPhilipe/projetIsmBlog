@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des categories!{% endblock %}
+
+{% block body %}
+    <!-- DataTales Example -->
+        <div class="row">
+    
+    {{ form_start(form,
+        {"attr":
+          {"class":"form-online"}}) }}
+
+      
+          <div class="form-group ml-5 my-2 row">
+            <label for="">{{ form_label(form.libelle)}}</label>
+            {{ form_widget(form.libelle, {"attr":{"class":"form-control"}})}}
+            {{ form_row(form.Enregistrer)}}
+
+            <small id="helpId" class="form-text text-muted">{{ form_errors(form.libelle)}}</small>
+          </div>
+      {{ form_end(form) }}
+      
+
+
+
+    </div>
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Liste des catégories</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive" >
+                <table class="table table-bordered" id="tableCategorie" width="100%" cellspacing="0" >
+                  <thead>
+                    <tr>
+                      <th class="w-25">ID</th>
+                      <th class="w-25">Libelle</th>
+                      <th class="w-25">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for categorie in categories %}
+                      <tr>
+                        <td>{{categorie.id}}</td>
+                        <td>{{categorie.libelle}}</td>
+                        <td>
+                          <a href="{{path("article_by_categorie",{categorieId:categorie.id})}}" class="btn btn-success btn-icon-split">
+                            <span class="icon text-white-50">
+                              <i class="fas fa-info"></i>
+                            </span>
+                            <span class="text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Articles</font></font></span>
+                          </a>
+
+                          <a href="{{path("categorie_show",{id:categorie.id})}}" class="btn btn-warning btn-icon-split">
+                            <span class="icon text-white-50">
+                              <i class="fas fa-exclamation-triangle"></i>
+                            </span>
+                            <span class="text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Modifier</font></font></span>
+                          </a>
+
+                          <a href="{{path("categorie_delate",{id:categorie.id})}}" class="btn btn-danger btn-icon-split btn_delate" onClick="confirm('Veuillez confirmer la suppression')">
+                            <span class="icon text-white-50">
+                              <i class="fas fa-trash"></i>
+                            </span>
+                            <span class="text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Supprimer</font></font></span>
+                          </a>
+                        </td>
+                      </tr>
+                    {% else %}
+                      Pas de categories.
+                    {% endfor %}
+                    
+                        
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+ <!-- Page level plugins -->
+  <script src="{{asset("vendor/datatables/jquery.dataTables.min.js")}}"></script>
+  <script src="{{asset("vendor/datatables/dataTables.bootstrap4.min.js")}}"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="{{asset("js/demo/datatables-demo.js")}}"></script>
+  <script>
+  $(function(){
+    $(".btn_delate").on("click", function (event){
+      event.preventDefault()
+      if(confirm('Veuillez confirmer la suppression?')){
+        let urlDel = $(this).attr("href")
+
+        window.location.href =urlDel
+      }
+    })
+  })
+  </script>
+  
+
+  
+  <script>
+    $(document).ready(function() {
+    $('#tableCategorie').DataTable( {
+        responsive: false,
+        pageLength:5,
+        lengthMenu: [ 5, 10, 25, 50, 100 ]
+    } );
+
+
+
+
+
+} );
+  </script>
+{% endblock %}
