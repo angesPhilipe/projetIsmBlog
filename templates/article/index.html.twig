@@ -4,41 +4,30 @@
 
 {% block body %}
     <!-- DataTales Example -->
-    <div class="row">
-      {{ form_start(form,
-        {"attr":
-          {"class":"form-online"}}) }}
-
-      
-          <div class="form-group ml-5 my-2 row">
-            <label for="">{{ form_label(form.titre)}}</label>
-            {{ form_widget(form.titre, {"attr":{"class":"form-control"}})}}
-
-            <small id="helpId" class="form-text text-muted">{{ form_errors(form.titre)}}</small>
-          </div>
-
-          <div class="form-group ml-5 my-2 row">
-            <label for="">{{ form_label(form.contenu)}}</label>
-            {{ form_widget(form.contenu, {"attr":{"class":"form-control"}})}}
-            {{ form_row(form.Enregistrer)}}
-
-            <small id="helpId" class="form-text text-muted">{{ form_errors(form.contenu)}}</small>
-          </div>
-      {{ form_end(form) }}
-    </div>
-
         
           <div class="card shadow mb-4">
             <div class="card-header py-3">
               <h6 class="m-0 font-weight-bold text-primary">Liste des articles</h6>
             </div>
+
+          <div class="row">
+            <div class="col-5 float-right">
+              <a href="{{path("article_add")}}" class="btn btn-warning btn-icon-split" style="margin-left: 30px; margin-top: 15px;">
+                <span class="icon text-white-50">
+                  <i class="fas fa-plus"></i>
+                </span>
+                <span class="text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Nouveau</font></font></span>
+              </a>
+            </div>
+          </div>
             <div class="card-body">
               <div class="table-responsive" >
                 <table class="table table-bordered" id="tableCategorie" width="100%" cellspacing="0" >
                   <thead>
                     <tr>
                       <th class="w-25">Titre</th>
-                      <th class="w-25">Contenu</th>
+                      <th class="w-25">statut</th>
+                      <th class="w-25">categorie</th>
                       <th class="w-25">Action</th>
                     </tr>
                   </thead>
@@ -46,17 +35,18 @@
                     {% for article in articles %}
                       <tr>
                         <td>{{article.titre}}</td>
-                        <td>{{article.contenu}}</td>
+                        <td>{{article.isetat}}</td>
+                        <td>{{article.categorie.libelle}}</td>
                         <td>
 
-                          <a href="{{path("article_show",{id:article.id})}}" class="btn btn-warning btn-icon-split">
+                          <a href="{{path("article_add",{id:article.id})}}" class="btn btn-warning btn-icon-split">
                             <span class="icon text-white-50">
                               <i class="fas fa-exclamation-triangle"></i>
                             </span>
                             <span class="text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Modifier</font></font></span>
                           </a>
 
-                          <a href="{{path("article_delate",{id:article.id, catId:article.categorie.id})}}" class="btn btn-danger btn-icon-split btn_delate" onClick="confirm('Veuillez confirmer la suppression')">
+                          <a href="{{path("article_delate",{id:article.id})}}" class="btn btn-danger btn-icon-split btn_delate" onClick="confirm('Veuillez confirmer la suppression')">
                             <span class="icon text-white-50">
                               <i class="fas fa-trash"></i>
                             </span>
@@ -73,6 +63,7 @@
                 </table>
               </div>
             </div>
+          
           </div>
 {% endblock %}
 
@@ -84,28 +75,6 @@
 
   <!-- Page level custom scripts -->
   <script src="{{asset("js/demo/datatables-demo.js")}}"></script>
-  <script>
-  $(function(){
-    $(".btn_delate").on("click", function (event){
-      event.preventDefault()
-      if(confirm('Veuillez confirmer la suppression?')){
-        let urlDel = $(this).attr("href")
-        window.location.href =urlDel
-      }
-    })
-  })
-  </script>
-
-
-  
-  <script>
-    $(document).ready(function() {
-    $('#tableCategorie').DataTable( {
-        responsive: false,
-        pageLength:5,
-        lengthMenu: [ 5, 10, 25, 50, 100 ]
-    } );
-} );
-  </script>
+ 
   
 {% endblock %}

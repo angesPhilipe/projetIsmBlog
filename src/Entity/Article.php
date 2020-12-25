@@ -2,14 +2,25 @@
 
 namespace App\Entity;
 
-use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
+ * @UniqueEntity("titre", message="Le libelle existe deja")
+ * @Vich\Uploadable
  */
 class Article
 {
+
+    const GENRES = ["publier" => "publier", "dépublier" => "dépublier", "brouillon" => "brouillon"];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -19,13 +30,26 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="le titre est obligatoire")
      */
     private $titre;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(message="le contenu est obligatoire")
      */
     private $contenu;
+
+    /**
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     * @Vich\UploadableField(mapping="article_image", fileNameProperty="photo")
+     * @Assert\File(
+     *     maxSize = "1024k",
+     *     maxSizeMessage="image est trop grande"
+     * )
+     * @var File|null
+     */
+    private $imageFile;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -49,8 +73,10 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice({"publier", "dépublier", "brouillon"})
+     * @Assert\NotBlank(message="la catégorie est obligatoire")
      */
-    private $isEtat="brouillon";
+    private $isEtat = "brouillon";
 
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="articles")
@@ -58,8 +84,9 @@ class Article
      */
     private $categorie;
 
-    public function __construct(){
-        $this->createAt=new \DateTime;
+    public function __construct()
+    {
+        $this->createAt = new \DateTime;
     }
 
     public function getId(): ?int
@@ -91,6 +118,31 @@ class Article
         return $this;
     }
 
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
     public function getPhoto(): ?string
     {
         return $this->photo;

@@ -1,0 +1,25 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Hello FrontController!
+{% endblock %}
+
+{% block body %}
+	<div class="row" style="margin-top: 100px;">
+		{% for article in articles %}
+			<div class="card" style="width: 18rem;">
+                {% if article.photo %}
+                    <img src="{{ vich_uploader_asset(article, 'imageFile') }}" alt="{{article.titre}}" />
+                {% else %}
+                    <img class="card-img-top" src="https://source.unsplash.com/1080x720" alt="Card image cap">
+                {% endif %}
+				<div class="card-body">
+					<h5 class="card-title">{{article.titre}}</h5>
+					<p class="card-text">{{article.contenu|slice(0,150)}}</p>
+					
+					<a href="{{path("front_detail_article",{id:article.id})}}" class="btn btn-primary">lire la suite</a>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+{% endblock %}

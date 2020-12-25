@@ -48,7 +48,7 @@
                             <span class="icon text-white-50">
                               <i class="fas fa-info"></i>
                             </span>
-                            <span class="text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Articles</font></font></span>
+                            <span class="text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> Mes articles</font></font></span>
                           </a>
 
                           <a href="{{path("categorie_show",{id:categorie.id})}}" class="btn btn-warning btn-icon-split">
@@ -85,34 +85,6 @@
   <script src="{{asset("vendor/datatables/dataTables.bootstrap4.min.js")}}"></script>
 
   <!-- Page level custom scripts -->
-  <script src="{{asset("js/demo/datatables-demo.js")}}"></script>
-  <script>
-  $(function(){
-    $(".btn_delate").on("click", function (event){
-      event.preventDefault()
-      if(confirm('Veuillez confirmer la suppression?')){
-        let urlDel = $(this).attr("href")
-
-        window.location.href =urlDel
-      }
-    })
-  })
-  </script>
+  <script src="{{asset("js/demo/datatables-demo.js")}}"></script>  
   
-
-  
-  <script>
-    $(document).ready(function() {
-    $('#tableCategorie').DataTable( {
-        responsive: false,
-        pageLength:5,
-        lengthMenu: [ 5, 10, 25, 50, 100 ]
-    } );
-
-
-
-
-
-} );
-  </script>
 {% endblock %}

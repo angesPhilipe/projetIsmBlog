@@ -1,0 +1,65 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Détail article
+{% endblock %}
+{% block pagination %}{% endblock %}
+{% block body %}
+	<div class="container">
+		<div class="row mt-5">
+			<h6 class="display-4">Détails du article</h6>
+		</div>
+		<div class="row">
+			<div class="col-sm-8 mb-4">
+				<div class="card">
+					{% if article.photo %}
+						<img src="{{ vich_uploader_asset(article, 'imageFile') }}" alt="{{article.titre}}" />
+					{% else %}
+						<img class="card-img-top" src="https://source.unsplash.com/1080x720" alt="Card image cap">
+					{% endif %}
+					<div class="card-body">
+						<h5 class="card-title">{{article.titre}}</h5>
+						<p class="card-text">
+							{{article.contenu}}
+						</p>
+						<hr/>
+						
+					</div>
+				</div>
+			</div>
+			<!-- -------------------------------------------- -->
+			<div class="col">
+				<div class="card text-center" style="width: 18rem">
+					<img style="width: 8em; height:8em;" class="card-img-top rounded-circle align-self-center" src="https://api.randomuser.me/portraits/men/30.jpg" alt="Card image cap"/>
+					<div class="card-body">
+						<h5 class="card-title">The Customer</h5>
+						<p class="card-text">
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, nisi.
+						</p>
+					</div>
+					<div class="list-group">
+						<a href="#" class="list-group-item list-group-item-action bg-primary text-white">
+							<i class="fas fa-mobile-alt mr-2"></i>77181 88 77</a>
+						<span class="list-group-item list-group-item-action">
+							<a href="#">
+								<i class="fab fa-facebook-square fa-2x text-primary mr-1"></i>
+							</a>
+							<a href="#">
+								<i class="fab fa-whatsapp fa-2x text-success mr-1"></i>
+							</a>
+							<a href="#">
+								<i class="fab fa-twitter fa-2x text-primary mr-1"></i>
+							</a>
+							<a href="#">
+								<i class="fab fa-instagram fa-2x text-warning mr-1"></i>
+							</a>
+							<a href="#">
+								<i class="fab fa-youtube fa-2x text-danger"></i>
+							</a>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
